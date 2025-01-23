@@ -1,4 +1,4 @@
-package com.zup.productCRUD.repository;
+package com.zup.productCRUD.repositories;
 
 import com.zup.productCRUD.models.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
