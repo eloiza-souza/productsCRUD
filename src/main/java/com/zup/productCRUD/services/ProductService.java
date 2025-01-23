@@ -2,6 +2,7 @@ package com.zup.productCRUD.services;
 
 import com.zup.productCRUD.dtos.ProductRequest;
 import com.zup.productCRUD.dtos.ProductResponse;
+import com.zup.productCRUD.exceptions.ProductNotFoundException;
 import com.zup.productCRUD.models.Product;
 import com.zup.productCRUD.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository productRepository;
+
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -33,7 +35,7 @@ public class ProductService {
 
     public ProductResponse getProductById(Long id) {
         return productRepository.findById(id).map(this::mapToResponse)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                .orElseThrow(() -> new ProductNotFoundException("Produto com id '" + id + "' não encontrado"));
     }
 
     public List<ProductResponse> getProductsByName(String name) {
@@ -45,7 +47,7 @@ public class ProductService {
 
     public ProductResponse updateProduct(Long id, ProductRequest productRequest) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                .orElseThrow(() -> new ProductNotFoundException("Produto com id '" + id + "' não encontrado"));
 
         product.setName(productRequest.getName());
         product.setDescription(productRequest.getDescription());
@@ -58,7 +60,7 @@ public class ProductService {
 
     public void deleteProductById(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new IllegalArgumentException("Produto não encontrado.");
+            throw new ProductNotFoundException("Produto com id '" + id + "' não encontrado");
         }
         productRepository.deleteById(id);
     }
