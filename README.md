@@ -36,22 +36,22 @@ Certifique-se de ter as seguintes ferramentas instaladas:
 ### Passos para execução
 1. **Clone o repositório**:
    ```bash
-   git clone https://github.com/seu-usuario/product-crud-api.git
-   cd product-crud-api
-
-2. **Configure o banco de dados**:
+     git clone git@github.com:eloiza-souza/productsCRUD.git
+     cd productsCRUD
+   ```
+2. **Configure o banco de dados**:n
+3. 
 
 No arquivo src/main/resources/application.properties, configure as credenciais do banco de dados. 
 
 Exemplo para H2:
-
-  `````declarative
-spring.datasource.url=jdbc:h2:mem:testdb
-spring.datasource.driverClassName=org.h2.Driver
-spring.datasource.username=sa
-spring.datasource.password=
-spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
-``````
+   ```
+      spring.datasource.url=jdbc:h2:mem:testdb
+      spring.datasource.driverClassName=org.h2.Driver
+      spring.datasource.username=sa
+      spring.datasource.password=
+      spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+   ```
 
 3. **Instale as dependências**:
 
@@ -64,9 +64,9 @@ mvn clean install
 4. **Execute a aplicação**:
 
 Inicie o servidor Spring Boot:
-````bash
-mvn spring-boot:run
-````
+   ```bash
+      mvn spring-boot:run
+   ```
 
 5. **Acesse a API**:
 
@@ -80,18 +80,22 @@ Corpo:
 
 ````json
 {
-"name": "Produto A",
-"description": "Descrição do Produto A",
-"price": 100.0
+    "name": "Produto A",
+    "description": "Descrição do Produto A",
+    "price": 100.0,
+    "stockQuantity": 10,
+    "category": "Roupas"
 }
 ````
 Resposta:
 ````json
 {
-"id": 1,
-"name": "Produto A",
-"description": "Descrição do Produto A",
-"price": 100.0
+    "id": 1,
+    "name": "Produto A",
+    "description": "Descrição do Produto A",
+    "price": 100.0,
+    "stockQuantity": 10,
+    "category": "Roupas"
 }
 ````
 
@@ -104,16 +108,20 @@ Resposta:
 ````json
 [
 {
-"id": 1,
-"name": "Produto A",
-"description": "Descrição do Produto A",
-"price": 100.0
+    "id": 1,
+    "name": "Produto A",
+    "description": "Descrição do Produto A",
+    "price": 100.0,
+    "stockQuantity": 10,
+    "category": "Roupas"
 },
 {
-"id": 2,
-"name": "Produto B",
-"description": "Descrição do Produto B",
-"price": 200.0
+    "id": 2,
+    "name": "Produto B",
+    "description": "Descrição do Produto B",
+    "price": 200.0,
+    "stockQuantity": 10,
+    "category": "Alimentos"
 }
 ]
 ````
@@ -125,20 +133,20 @@ Resposta:
 
 ````json
 {
-"id": 1,
-"name": "Produto A",
-"description": "Descrição do Produto A",
-"price": 100.0
+   "id": 1,
+   "name": "Produto A",
+   "description": "Descrição do Produto A",
+   "price": 100.0,
+   "stockQuantity": 10,
+   "category": "Roupas"
 }
 ````
 Requisição: GET /products/3
 
 Resposta:
 
-````json
-{
-  "error": "Produto não encontrado"
-}
+````
+   Produto com id '3' não encontrado
 ````
 ### Atualizar Produto
 Requisição: PUT /products/1
@@ -148,20 +156,23 @@ Corpo:
 ````json
 
 {
-"name": "Produto A Atualizado",
-"description": "Nova descrição do Produto A",
-"price": 150.0
+   "name": "Produto A Atualizado",
+   "description": "Nova descrição do Produto A",
+   "price": 350.00,
+   "stockQuantity": 10,
+   "category": "Roupas"
 }
 ````
 Resposta:
 
 ````json
-
 {
-"id": 1,
-"name": "Produto A Atualizado",
-"description": "Nova descrição do Produto A",
-"price": 150.0
+   "id": 1,
+   "name": "Produto A Atualizado",
+   "description": "Nova descrição do Produto A", 
+   "price": 350.00, 
+   "stockQuantity": 10,
+   "category": "Roupas"
 }
 ````
 
