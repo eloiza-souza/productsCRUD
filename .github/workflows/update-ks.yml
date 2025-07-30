@@ -20,7 +20,7 @@ jobs:
 
       - name: Obter o JWT
         run: |
-          JWT=$(curl -s "https://idm.stackspot.com/${{ secrets.REALM }}/oidc/oauth/token" \
+          JWT=$(curl -s "https://idm.stackspot.com/${{ secrets.CLIENT_REALM }}/oidc/oauth/token" \
             -H 'Content-Type: application/x-www-form-urlencoded' \
             -d 'grant_type=client_credentials' \
             -d "client_id=${{ secrets.CLIENT_ID }}" \
