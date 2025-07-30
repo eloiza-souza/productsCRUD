@@ -32,7 +32,7 @@ jobs:
           upload_data=$(curl -s -X POST 'https://genai-code-buddy-api.stackspot.com/v1/file-upload/form' \
             -H 'Content-Type: application/json' \
             -H "Authorization: Bearer ${{ env.JWT }}" \
-            -d '{"file_name": "README.md", "target_id": "updatetest", "target_type": "KNOWLEDGE_SOURCE", "expiration": 600 }')
+            -d '{"file_name": "README.md", "target_id": "e19cf5-updatetest", "target_type": "KNOWLEDGE_SOURCE", "expiration": 600 }')
           echo "$upload_data"         # <--- debug, veja o conteúdo real
           echo "$upload_data" > upload_data.json
           echo "UPLOAD_URL=$(jq -r '.url' upload_data.json)" >> $GITHUB_ENV
