@@ -60,3 +60,8 @@ jobs:
             -F "policy=$policy" \
             -F "x-amz-signature=$x_amz_signature" \
             -F "file=@README.md"
+
+      - name: Checar status do upload
+        run: |
+          curl --location "https://genai-code-buddy-api.stackspot.com/v1/file-upload/@${UPLOAD_ID}" \
+            --header "Authorization: Bearer $JWT"
