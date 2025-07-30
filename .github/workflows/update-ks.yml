@@ -37,7 +37,10 @@ jobs:
           echo "$upload_data" > upload_data.json
           echo "UPLOAD_URL=$(jq -r '.url' upload_data.json)" >> $GITHUB_ENV
           echo "UPLOAD_ID=$(jq -r '.id' upload_data.json)" >> $GITHUB_ENV
-          
+
+      - name: Debug upload_data.json
+        run: cat upload_data.json
+
       - name: Upload do arquivo para a URL assinada
         run: |
           key=$(jq -r '.form.key' upload_data.json)
@@ -47,7 +50,7 @@ jobs:
           x_amz_security_token=$(jq -r '.form["x-amz-security-token"]' upload_data.json)
           policy=$(jq -r '.form.policy' upload_data.json)
           x_amz_signature=$(jq -r '.form["x-amz-signature"]' upload_data.json)
-          curl -X POST "${{ env.UPLOAD_URL }}" \
+          curl -v -X POST "${{ env.UPLOAD_URL }}" \
             -F "key=$key" \
             -F "x-amz-algorithm=$x_amz_algorithm" \
             -F "x-amz-credential=$x_amz_credential" \
