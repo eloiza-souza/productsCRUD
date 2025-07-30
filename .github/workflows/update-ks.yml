@@ -3,9 +3,9 @@ name: Atualizar KS na StackSpot
 on:
   push:
     paths:
-      - 'https://github.com/eloiza-souza/productsCRUD/blob/main/README.md' # ajuste para o caminho do seu KS
+      - 'README.md' 
     branches:
-      - main # ou a branch que desejar monitorar
+      - main
 
 jobs:
   update-ks:
@@ -25,4 +25,4 @@ jobs:
 
       - name: Atualizar o KS
         run: |
-          stk ks update --path https://ai.stackspot.com/knowledge-sources/e19cf5-updatetest?tabIndex=0
+            $HOME/.stk/bin/stk ks update --path ./README.md 
