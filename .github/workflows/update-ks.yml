@@ -43,6 +43,7 @@ jobs:
 
       - name: Upload do arquivo para a URL assinada
         run: |
+          UPLOAD_URL=$(jq -r '.url' upload_data.json)
           key=$(jq -r '.form.key' upload_data.json)
           x_amz_algorithm=$(jq -r '.form["x-amz-algorithm"]' upload_data.json)
           x_amz_credential=$(jq -r '.form["x-amz-credential"]' upload_data.json)
@@ -50,7 +51,7 @@ jobs:
           x_amz_security_token=$(jq -r '.form["x-amz-security-token"]' upload_data.json)
           policy=$(jq -r '.form.policy' upload_data.json)
           x_amz_signature=$(jq -r '.form["x-amz-signature"]' upload_data.json)
-          curl -v -X POST "${{ env.UPLOAD_URL }}" \
+          curl -v -X POST "$UPLOAD_URL" \
             -F "key=$key" \
             -F "x-amz-algorithm=$x_amz_algorithm" \
             -F "x-amz-credential=$x_amz_credential" \
