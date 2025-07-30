@@ -65,3 +65,10 @@ jobs:
         run: |
           curl --location "https://genai-code-buddy-api.stackspot.com/v1/file-upload/@${UPLOAD_ID}" \
             --header "Authorization: Bearer $JWT"
+
+      - name: Converter arquivo em Knowledge Objects
+        run: |
+          curl -X POST "https://data-integration-api.stackspot.com/v1/file-upload/${UPLOAD_ID}/knowledge-objects" \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: Bearer $JWT" \
+            -d '{ "split_strategy": "LINES_QUANTITY", "split_quantity": 500, "split_overlap": 50 }'
