@@ -3,7 +3,7 @@ name: Atualizar KS na StackSpot
 on:
   push:
     paths:
-      - 'README.md' 
+      - 'README.md'
     branches:
       - main
 
@@ -25,6 +25,4 @@ jobs:
 
       - name: Atualizar o KS
         run: |
-            $HOME/.stk/bin/stk ks update --path ./README.md 
-
-            
+          $HOME/.stk/bin/stk ks update --path ./README.md
