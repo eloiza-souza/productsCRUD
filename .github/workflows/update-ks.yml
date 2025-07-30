@@ -1,28 +1,56 @@
-name: Atualizar KS na StackSpot
+name: Atualizar KS via API
 
 on:
   push:
     paths:
-      - 'README.md' 
+      - 'README.md'
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  update-ks:
+  update-ks-api:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: Instalar o STK CLI
-        run: |
-          curl -fsSL https://cli.stackspot.com/install.sh | bash
-          export PATH="$HOME/.stk/bin:$PATH"
+      - name: Instalar dependências (jq)
+        run: sudo apt-get update && sudo apt-get install -y jq
 
-      - name: Autenticar no StackSpot
+      - name: Obter o JWT
         run: |
-          $HOME/.stk/bin/stk login --client-id ${{ secrets.CLIENT_ID }} --client-key ${{ secrets.CLIENT_KEY }} --realm ${{ secrets.CLIENT_REALM }}
+          JWT=$(curl -s "https://idm.stackspot.com/${{ secrets.REALM }}/oidc/oauth/token" \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+            -d 'grant_type=client_credentials' \
+            -d "client_id=${{ secrets.CLIENT_ID }}" \
+            -d "client_secret=${{ secrets.CLIENT_KEY }}" | jq -r '.access_token')
+          echo "JWT=$JWT" >> $GITHUB_ENV
 
-      - name: Atualizar o KS
+      - name: Solicitar URL de upload
         run: |
-            $HOME/.stk/bin/stk ks update --path ./README.md 
+          upload_data=$(curl -s -X POST 'https://data-integration-api.stackspot.com/v2/file-upload/form' \
+            -H 'Content-Type: application/json' \
+            -H "Authorization: Bearer $JWT" \
+            -d '{"file_name": "README.md", "target_id": "updatetest", "target_type": "KNOWLEDGE_SOURCE", "expiration": 600 }')
+          echo "$upload_data" > upload_data.json
+          echo "UPLOAD_URL=$(jq -r '.url' upload_data.json)" >> $GITHUB_ENV
+
+      - name: Upload do arquivo para a URL assinada
+        run: |
+          key=$(jq -r '.form.key' upload_data.json)
+          x_amz_algorithm=$(jq -r '.form["x-amz-algorithm"]' upload_data.json)
+          x_amz_credential=$(jq -r '.form["x-amz-credential"]' upload_data.json)
+          x_amz_date=$(jq -r '.form["x-amz-date"]' upload_data.json)
+          x_amz_security_token=$(jq -r '.form["x-amz-security-token"]' upload_data.json)
+          policy=$(jq -r '.form.policy' upload_data.json)
+          x_amz_signature=$(jq -r '.form["x-amz-signature"]' upload_data.json)
+          curl -X POST "$UPLOAD_URL" \
+            -F "key=$key" \
+            -F "x-amz-algorithm=$x_amz_algorithm" \
+            -F "x-amz-credential=$x_amz_credential" \
+            -F "x-amz-date=$x_amz_date" \
+            -F "x-amz-security-token=$x_amz_security_token" \
+            -F "policy=$policy" \
+            -F "x-amz-signature=$x_amz_signature" \
+            -F "file=@README.md"
