@@ -26,3 +26,5 @@ jobs:
       - name: Atualizar o KS
         run: |
             $HOME/.stk/bin/stk ks update --path ./README.md 
+
+            
