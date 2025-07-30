@@ -2,6 +2,7 @@
 
 ## Descrição do programa
 Este repositório contém uma API RESTful para gerenciar produtos, implementada em Java utilizando o framework Spring Boot. A API permite criar, listar, buscar, atualizar e deletar produtos. É ideal para sistemas que necessitam de um CRUD (Create, Read, Update, Delete) básico para gerenciamento de produtos.
+Foi adicionado um workflow para teste de atualização de KS no Stackspot.
 
 --UPDATE__
 
